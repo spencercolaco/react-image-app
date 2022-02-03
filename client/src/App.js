@@ -13,7 +13,7 @@ function App() {
   useEffect(() => {
     fetch("http://localhost:5000/image/")
     .then(response => response.json())
-        // 4. Setting *list* to the list url that we received from the response above
+    // 4. Setting *list* to the list url that we received from the response above
     .then(data => setList(data))
     .catch((error) => console.log(error));
   },[])
@@ -39,9 +39,8 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Upload to server</h1>
-      {image.preview && <img src={image.preview} width='100' height='100' />}
-      <hr></hr>
+      <h1>Simple Image Upload with React</h1>
+      {image.preview && <img src={image.preview} width={'200px'} />}
       <form onSubmit={handleSubmit}>
         <input type='file' name='file' onChange={handleFileChange}></input>
         <button type='submit'>Submit</button>
