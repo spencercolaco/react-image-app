@@ -16,7 +16,7 @@ function App() {
   
   useEffect(() => {
     search()
-  },[list, fuse])
+  },[query, fuse])
 
   // Set collection with Fuse
   function setCollection(listData) {
@@ -78,9 +78,9 @@ function App() {
   }
 
   // Watch search query and call search()
+  // ** This may be running search() before setQuery() because state is async
   function handleSearch (e) {
     setQuery(e.target.value);
-    search()
   }
 
   return (
