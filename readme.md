@@ -33,6 +33,8 @@ To upload an image, please press the "choose file" button to browse your local f
 ## Road Map
 I am continuing to work on a more robust UI and better understand how to watch for state changes with a fuzzy-search algorithm like Fuse. Wiring together this kind of functionality can be tricky and needs to be looked into further.
 
+The front end could be componetized to separate our concerns a bit and enjoy a cleaner App.js file.
+
 I would also like to explore a potentially less hacky way to style an `<input type="file" />` element. The native HTML input is used here for brevity.
 
 ## License
