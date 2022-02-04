@@ -29,7 +29,7 @@ function App() {
 
   function init() {
     fetch("http://localhost:5000/image/")
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
       setList(data)
       createFuse(data)
@@ -51,12 +51,12 @@ function App() {
     e.preventDefault()
     let formData = new FormData()
     formData.append('file', image.data)
-    const response = await fetch('http://localhost:5000/image', {
+    const res = await fetch('http://localhost:5000/image', {
       method: 'POST',
       body: formData,
     })
-    const resData = await response.json()
-    if (response.status === 200) {
+    const resData = await res.json()
+    if (res.status === 200) {
       console.log(resData.path)
       const listData = [...list, {name: resData.path, url: resData.path}]
       setCollection(listData)
@@ -71,9 +71,9 @@ function App() {
     setImage(img)
   }
 
-  function handleOnSearch ({ currentTarget = {} }) {
-    const { value } = currentTarget;
-    setQuery(value);
+  function handleSearch (e) {
+    setQuery(e.target.value);
+    search()
   }
 
   return (
@@ -81,7 +81,7 @@ function App() {
       <h1 className='App--heading'>Simple Image Upload with React</h1>
       <form className='App--form' onSubmit={handleSubmit}>
         <label>
-          <input className='form--search' placeholder='Search...' type='text' value={query} onChange={handleOnSearch} />
+          <input className='form--search' placeholder='Search...' type='text' value={query} onChange={handleSearch} />
         </label>
         <label>
           <input className='form--file' type='file' name='file' onChange={handleFileChange} />
