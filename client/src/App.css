@@ -1,38 +1,64 @@
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  color: black;
+}
+
 .App {
-  /* text-align: center; */
+  
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.App--heading {
+  background: black;
   color: white;
+  margin: 0;
+  padding: 32px 0;
+  text-align: center;
 }
 
-.App-link {
-  color: #61dafb;
+.App--form {
+  display: flex;
+  justify-content: space-around;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.form--file, .form--search {
+  height: 2.5rem;
+  line-height: 1.5;
+  color: #555;
+  background-color: #fff;
+  border: 0.075rem solid #ddd;
+  border-radius: 0.25rem;
+  box-shadow: inset 0 0.2rem 0.4rem rgb(0 0 0 / 5%);
+}
+
+.form--search {
+  padding: 0 16px;
+}
+
+.form--file::file-selector-button, .form--submit {
+  background-color: #eee=;
+  border: 0.075rem solid #ddd;
+  border-radius: 0 0.25rem 0.25rem 0;
+  color: black;
+  height: 2.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.App--grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 10px;
+  padding: 32px;
+}
+
+@media (min-width: 768px) {
+  .App--grid {
+    grid-template-columns: repeat(2, 1fr);  
+  } 
 }

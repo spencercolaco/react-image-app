@@ -4,6 +4,8 @@ const port = 5000
 const cors = require('cors')
 const multer = require('multer')
 const fs = require('fs')
+const path = require('path')
+const NodeUrl = require('url')
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -72,7 +74,11 @@ app.use(cors())
 app.get("/image", getListFiles);
 app.get("/image/:name", download);
 app.post('/image', upload.single('file'), function (req, res) {
-  res.json({})
+  const url = new NodeUrl.URL(`http://localhost:${port}`)
+  url.pathname = path.join('/image', req.file.filename)
+  res.json({
+    path: url.toString()
+  })
 })
 
 app.listen(port, () => {

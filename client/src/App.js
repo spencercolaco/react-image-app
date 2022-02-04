@@ -1,24 +1,53 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
+import Fuse from 'fuse.js'
 
 function App() {
-  // 2. Create our *list* variable as well as the *setList* function via useState
-  // We're setting the default value of list to null, so that while we wait for the
-  // fetch to complete, we dont attempt to render the list
   const [list, setList] = useState(null)
-  const [image, setImage] = useState({ preview: '', data: '' })
-  const [status, setStatus] = useState('')
+  const [image, setImage] = useState({ data: '' })
+  const [query, setQuery] = useState('')
+  const [imageResults, setImageResults] = useState([])
+  const [fuse, setFuse] = useState(null)
 
-  // 3. Create out useEffect function
   useEffect(() => {
+    init()
+  },[])
+  
+  useEffect(() => {
+    search()
+  },[list, fuse])
+
+  function setCollection(listData) {
+    fuse.setCollection(listData)
+  }
+
+  function search() {
+    if (!fuse) return false
+    const results = fuse.search(query)
+    setImageResults(query ? results.map(result => result.item) : list)
+  }
+
+  function init() {
     fetch("http://localhost:5000/image/")
     .then(response => response.json())
-    // 4. Setting *list* to the list url that we received from the response above
-    .then(data => setList(data))
+    .then(data => {
+      setList(data)
+      createFuse(data)
+    })
     .catch((error) => console.log(error));
-  },[])
+  }
+  
+  function createFuse(data) {
+    const fuse = new Fuse(data, {
+      keys: [
+          'name',
+          'url',
+      ]
+    })
+    setFuse(fuse)
+  }
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault()
     let formData = new FormData()
     formData.append('file', image.data)
@@ -26,30 +55,42 @@ function App() {
       method: 'POST',
       body: formData,
     })
-    if (response) setStatus(response.statusText)
+    const resData = await response.json()
+    if (response.status === 200) {
+      console.log(resData.path)
+      const listData = [...list, {name: resData.path, url: resData.path}]
+      setCollection(listData)
+      setList(listData)
+    }
   }
 
-  const handleFileChange = (e) => {
+  function handleFileChange(e) {
     const img = {
-      preview: URL.createObjectURL(e.target.files[0]),
       data: e.target.files[0],
     }
     setImage(img)
   }
 
+  function handleOnSearch ({ currentTarget = {} }) {
+    const { value } = currentTarget;
+    setQuery(value);
+  }
+
   return (
-    <div className="App">
-      <h1>Simple Image Upload with React</h1>
-      {image.preview && <img src={image.preview} width={'200px'} />}
-      <form onSubmit={handleSubmit}>
-        <input type='file' name='file' onChange={handleFileChange}></input>
-        <button type='submit'>Submit</button>
+    <div className='App'>
+      <h1 className='App--heading'>Simple Image Upload with React</h1>
+      <form className='App--form' onSubmit={handleSubmit}>
+        <label>
+          <input className='form--search' placeholder='Search...' type='text' value={query} onChange={handleOnSearch} />
+        </label>
+        <label>
+          <input className='form--file' type='file' name='file' onChange={handleFileChange} />
+          <button className='form--submit' type='submit'>Submit</button>
+        </label>
       </form>
-      {status && <h4>{status}</h4>}
-    {/* 5. Returning an img element for each url, again with the value of our src set to the list url */}
-    {list &&
-      list.map((img, i) => <img key={img.name} width={"200px"} src={img.url} />)
-    }
+      <div className='App--grid'>
+        {imageResults.map(img => <img key={img.name} style={{width: '100%'}} src={img.url} />)}
+      </div>
     </div>
   );
 }
