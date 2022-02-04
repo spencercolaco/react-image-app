@@ -3,6 +3,7 @@ import './App.css';
 import Fuse from 'fuse.js'
 
 function App() {
+  // Declare states
   const [list, setList] = useState(null)
   const [image, setImage] = useState({ data: '' })
   const [query, setQuery] = useState('')
@@ -17,16 +18,19 @@ function App() {
     search()
   },[list, fuse])
 
+  // Set collection with Fuse
   function setCollection(listData) {
     fuse.setCollection(listData)
   }
 
+  // Search logic with Fuse
   function search() {
     if (!fuse) return false
     const results = fuse.search(query)
     setImageResults(query ? results.map(result => result.item) : list)
   }
 
+  // Get API
   function init() {
     fetch("http://localhost:5000/image/")
     .then(res => res.json())
@@ -37,6 +41,7 @@ function App() {
     .catch((error) => console.log(error));
   }
   
+  // Instantiate Fuse
   function createFuse(data) {
     const fuse = new Fuse(data, {
       keys: [
@@ -47,6 +52,7 @@ function App() {
     setFuse(fuse)
   }
 
+  // Handle submit and post to API
   async function handleSubmit(e) {
     e.preventDefault()
     let formData = new FormData()
@@ -57,13 +63,13 @@ function App() {
     })
     const resData = await res.json()
     if (res.status === 200) {
-      console.log(resData.path)
       const listData = [...list, {name: resData.path, url: resData.path}]
       setCollection(listData)
       setList(listData)
     }
   }
 
+  // Handle uploaded files
   function handleFileChange(e) {
     const img = {
       data: e.target.files[0],
@@ -71,6 +77,7 @@ function App() {
     setImage(img)
   }
 
+  // Watch search query and call search()
   function handleSearch (e) {
     setQuery(e.target.value);
     search()
