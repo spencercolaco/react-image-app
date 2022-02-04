@@ -7,6 +7,7 @@ const fs = require('fs')
 const path = require('path')
 const NodeUrl = require('url')
 
+// Declare Multer instance and pass in settings
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'images/')
@@ -17,8 +18,8 @@ const storage = multer.diskStorage({
   },
 })
 
+// Config multer
 const upload = multer({ 
-  // Config multer
   storage: storage,
   fileFilter: (req, file, cb) => {
     if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
@@ -33,6 +34,7 @@ const upload = multer({
   }
 })
 
+// Get current files
 const getListFiles = (req, res) => {
   const directoryPath = __dirname + "/images";
 
@@ -56,6 +58,7 @@ const getListFiles = (req, res) => {
   });
 };
 
+// Download behavior
 const download = (req, res) => {
   const fileName = req.params.name;
   const directoryPath = __dirname + "/images/";
@@ -69,6 +72,7 @@ const download = (req, res) => {
   });
 };
 
+// Enable CORS
 app.use(cors())
 
 app.get("/image", getListFiles);
