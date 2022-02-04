@@ -28,7 +28,9 @@ To upload an image, please press the "choose file" button to browse your local f
 
 ## Known issues
 
-- There is currently a bug when searching for an image. Sometimes the images do not re-populate after a search query and the page needs to be refreshed to bring them back. Currently working on a fix for this.
+- ~~There is currently a bug when searching for an image. Sometimes the images do not re-populate after a search query and the page needs to be refreshed to bring them back. Currently working on a fix for this.~~
+
+Bug has been resolved as of 2/4/2022 at 11:35am.
 
 ## Road Map
 I am continuing to work on a more robust UI and better understand how to watch for state changes with a fuzzy-search algorithm like Fuse. Wiring together this kind of functionality can be tricky and needs to be looked into further.
